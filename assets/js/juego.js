@@ -9,11 +9,20 @@ let deck = [];
 const tipos = ['C','D','H','S'];
 const especiales = ['A','J','Q','K'];
 
+let puntosJugador = 0;
+let puntosComputadora = 0;
+
+//Referencias HTML
+const btnPedir = document.querySelector('#btnPedir');
+
+const divCartasJugador = document.querySelector('#jugador-cartas')
+const puntosHTML = document.querySelectorAll('small')
+
 
 //Esta función crea una nueva baraja
 const  crearDeck = () => {
 
-    for(let i = 2; i < 10; i++){
+    for(let i = 2; i <= 10; i++){
         for(let tipo of tipos){
             deck.push(`${i}${tipo}`)
         }
@@ -36,7 +45,7 @@ const  crearDeck = () => {
 
 crearDeck();
 
-//Esta función me permite tomar una cartas
+//Esta función me permite tomar una carta
 
 const pedirCarta = () => {
 
@@ -46,40 +55,46 @@ const pedirCarta = () => {
 
     const carta = deck.pop();
 
-    console.log(deck);
-    console.log({carta}); //La carta debe ser de la baraja
+    // console.log(deck);
+    // console.log({carta}); //La carta debe ser de la baraja
     return carta;
 }
 
-// deck = [];
-// pedirCarta();
+//Esta función me devuelve el valor de cada carta dada.
 
 const valorCarta = (carta) => {
 
     const valor = carta.substring(0,carta.length - 1); //Eliminamos el último carácter del string
-    // console.log({valor});
-    //2 = 2; 10 = 10; 3 = 3
-    // let puntos = 0
-
-
-    // if(isNaN(valor)){
-    //     // console.log('No es un número');
-    //     puntos = (valor === 'A') ? 11 : 10;
-    // }else{
-    //     // console.log('Es un numero');
-    //     puntos = valor * 1; //Transformamos el string a num
-    // }
 
     return (isNaN(valor)) ? (valor === 'A')  ? 11 : 10 
     : valor * 1;
 
-    
-
-    // puntos = valor * 1;
-
-    // console.log(puntos);
-
 }
 
 const valor = valorCarta(pedirCarta());
-console.log({valor});
+// console.log({valor});
+
+
+//Eventos
+
+btnPedir.addEventListener('click', () => {
+
+    const carta = pedirCarta();
+    puntosJugador = puntosJugador + valorCarta(carta)
+    // console.log(puntosJugador);
+    puntosHTML[0].innerHTML = '<strong>' + puntosJugador + '</strong>';
+
+    // <img class='carta' src="./assets/cartas/2S.png" alt=""></img>
+    const imgCarta = document.createElement('img');
+    imgCarta.classList.add('carta')
+    imgCarta.src=`/assets/cartas/${carta}.png`
+    divCartasJugador.append(imgCarta);
+
+    if(puntosJugador > 21){
+        console.warn('Has perdido! 💀💀')
+        btnPedir.disabled = true;
+    }else if(puntosJugador === 21){
+        console.warn('21, Genial! 😉😉');
+    }
+
+});
