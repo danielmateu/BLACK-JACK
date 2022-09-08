@@ -2,11 +2,6 @@
 (() => {
     'use strict'
 
-
-
-
-
-
     let deck = [];
     const tipos = ['C', 'D', 'H', 'S'];
     const especiales = ['A', 'J', 'Q', 'K'];
