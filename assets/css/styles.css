@@ -1,9 +1,13 @@
-html,body{
+body{
     margin: 0;
     background: #2F4F30;
     color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
 }
-
 
 .titulo{
     text-align: center;
@@ -11,7 +15,8 @@ html,body{
     color: #fff;
     padding: 1em;
     font-size: 1em;
-
+    width: 100vw;
+    
 }
 
 
