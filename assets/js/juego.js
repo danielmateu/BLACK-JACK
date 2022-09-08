@@ -1,5 +1,4 @@
 
-
 // 2C = Two of Clubs ( Tréboles )
 // 2D = Two of Diamonds ( Diamantes )
 // 2H = Two of Hearts ( Corazones )
@@ -14,8 +13,12 @@ let puntosComputadora = 0;
 
 //Referencias HTML
 const btnPedir = document.querySelector('#btnPedir');
+const btnDetener = document.querySelector('#btnDetener')
+const btnNuevo = document.querySelector('#btnNuevo')
 
 const divCartasJugador = document.querySelector('#jugador-cartas')
+const divCartasComuptadora = document.querySelector('#computadora-cartas')
+
 const puntosHTML = document.querySelectorAll('small')
 
 
@@ -37,7 +40,7 @@ const  crearDeck = () => {
     // console.log(deck);
 
     deck = _.shuffle(deck); //Arreglo modificado en orden aleatorio
-    console.log(deck);
+    // console.log(deck);
 
     return deck;
 
@@ -75,6 +78,62 @@ const valor = valorCarta(pedirCarta());
 // console.log({valor});
 
 
+//TURNO DE LA CPU 
+
+const turnoComputadora = (puntosMinimos) => {
+
+    do {
+
+    const carta = pedirCarta();
+
+    puntosComputadora = puntosComputadora + valorCarta(carta)
+    puntosHTML[1].innerHTML = '<strong>' + puntosComputadora + '</strong>';
+
+    // <img class='carta' src="./assets/cartas/2S.png" alt=""></img>
+    const imgCarta = document.createElement('img');
+    imgCarta.classList.add('carta')
+    imgCarta.src=`/assets/cartas/${carta}.png`
+    divCartasComuptadora.append(imgCarta);
+
+        if(puntosMinimos > 21){
+            
+            break;
+        }
+        
+
+    } while ( (puntosComputadora < puntosMinimos) && (puntosMinimos <= 21) );
+
+    // if(puntosComputadora > 21 ){
+    //     alert('Mierda! Has ganado... 👾👾')
+    // }
+
+    setTimeout(() => {
+        if(puntosComputadora === puntosMinimos){
+            alert('Nadie gana... 🙃')
+        }else if(puntosMinimos > 21){
+            alert('Yo Gano! 🥰')
+        }else if(puntosComputadora > 21){
+            alert('Tu ganas... 💩')
+        }else{
+            alert('Yo Gano! 🥰')
+        }
+    },100)
+
+    // respuestaVictoria()
+}
+
+
+const juegoNuevo = () => {
+    puntosJugador = 0;
+    puntosComputadora = 0;
+    puntosHTML[0].innerText =0
+    puntosHTML[1].innerText = 0
+    divCartasJugador.innerHTML = '';
+    divCartasComuptadora.innerHTML = '';
+    btnPedir.disabled = false;
+    btnDetener.disabled = false;
+}
+
 //Eventos
 
 btnPedir.addEventListener('click', () => {
@@ -93,8 +152,28 @@ btnPedir.addEventListener('click', () => {
     if(puntosJugador > 21){
         console.warn('Has perdido! 💀💀')
         btnPedir.disabled = true;
+        btnDetener.disabled = true;
+        turnoComputadora(puntosJugador);
     }else if(puntosJugador === 21){
+        btnDetener.disabled = true;
         console.warn('21, Genial! 😉😉');
+        turnoComputadora(puntosJugador);
     }
 
 });
+
+btnDetener.addEventListener('click', () => {
+    btnPedir.disabled = true;
+    btnDetener.disabled = true;
+    
+    turnoComputadora(puntosJugador);
+});
+
+btnNuevo.addEventListener('click', () => {
+    // crearDeck()
+    juegoNuevo();
+})
+
+// //TODO: Borrar 
+// console.log(16);
+// turnoComputadora(16)
