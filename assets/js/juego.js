@@ -3,25 +3,35 @@
     'use strict'
 
     let deck = [];
-    const tipos = ['C', 'D', 'H', 'S'];
-    const especiales = ['A', 'J', 'Q', 'K'];
+    const tipos = ['C', 'D', 'H', 'S'],
+        especiales = ['A', 'J', 'Q', 'K'];
 
-    let puntosJugador = 0;
-    let puntosComputadora = 0;
+    // let puntosJugador = 0,
+    //     puntosComputadora = 0;
+
+    let puntosJugadores = [];
 
     //Referencias HTML
-    const btnPedir = document.querySelector('#btnPedir');
-    const btnDetener = document.querySelector('#btnDetener')
-    const btnNuevo = document.querySelector('#btnNuevo')
+    const btnPedir = document.querySelector('#btnPedir'),
+        btnDetener = document.querySelector('#btnDetener'),
+        btnNuevo = document.querySelector('#btnNuevo');
 
-    const divCartasJugador = document.querySelector('#jugador-cartas')
-    const divCartasComuptadora = document.querySelector('#computadora-cartas')
+    const divCartasJugador = document.querySelector('#jugador-cartas'),
+        divCartasComuptadora = document.querySelector('#computadora-cartas'),
+        puntosHTML = document.querySelectorAll('small');
 
-    const puntosHTML = document.querySelectorAll('small')
-
+    //Funcion que inicia el juego, creando el deck
+    const inicializarJuego = (numJugadores = 2) => {
+        deck = crearDeck();
+        for(let i = 0; i < numJugadores; i++){
+            puntosJugadores.push(0);
+        }
+        console.log({puntosJugadores});
+    }
 
     //Esta función crea una nueva baraja
     const crearDeck = () => {
+        deck = [];
 
         for (let i = 2; i <= 10; i++) {
             for (let tipo of tipos) {
@@ -34,50 +44,35 @@
                 deck.push(esp + tipo)
             }
         }
-
-        // console.log(deck);
-
-        deck = _.shuffle(deck); //Arreglo modificado en orden aleatorio
-        // console.log(deck);
-
-        return deck;
-
+        return _.shuffle(deck); //Arreglo modificado en orden aleatorio
     }
-
-    crearDeck();
+    
 
     //Esta función me permite tomar una carta
-
     const pedirCarta = () => {
 
         if (deck.length === 0) {
             throw 'No hay cartas en el deck'
         }
-
-        const carta = deck.pop();
-
-        // console.log(deck);
-        // console.log({carta}); //La carta debe ser de la baraja
-        return carta;
+        return deck.pop();
     }
 
     //Esta función me devuelve el valor de cada carta dada.
-
     const valorCarta = (carta) => {
 
         const valor = carta.substring(0, carta.length - 1); //Eliminamos el último carácter del string
 
         return (isNaN(valor)) ? (valor === 'A') ? 11 : 10
             : valor * 1;
+    }
+
+    const acumularPuntos = () => {
+
+
 
     }
 
-    const valor = valorCarta(pedirCarta());
-    // console.log({valor});
-
-
     //TURNO DE LA CPU 
-
     const turnoComputadora = (puntosMinimos) => {
 
         do {
@@ -121,21 +116,20 @@
     }
 
 
-    const juegoNuevo = () => {
-        puntosJugador = 0;
-        puntosComputadora = 0;
-        puntosHTML[0].innerText = 0
-        puntosHTML[1].innerText = 0
-        divCartasJugador.innerHTML = '';
-        divCartasComuptadora.innerHTML = '';
-        btnPedir.disabled = false;
-        btnDetener.disabled = false;
-        console.clear()
+    // const juegoNuevo = () => {
+    //     puntosJugador = 0;
+    //     puntosComputadora = 0;
+    //     puntosHTML[0].innerText = 0
+    //     puntosHTML[1].innerText = 0
+    //     divCartasJugador.innerHTML = '';
+    //     divCartasComuptadora.innerHTML = '';
+    //     btnPedir.disabled = false;
+    //     btnDetener.disabled = false;
+    //     console.clear()
 
-    }
+    // }
 
     //Eventos
-
     btnPedir.addEventListener('click', () => {
 
         const carta = pedirCarta();
@@ -174,8 +168,22 @@
 
     btnNuevo.addEventListener('click', () => {
         // crearDeck()
+        console.clear();
+        // deck = [];
+        // deck = crearDeck();
+        inicializarJuego();
 
-        juegoNuevo();
+        puntosJugador = 0;
+        puntosComputadora = 0;
+
+        puntosHTML[0].innerText = 0
+        puntosHTML[1].innerText = 0
+
+        divCartasJugador.innerHTML = '';
+        divCartasComuptadora.innerHTML = '';
+
+        btnPedir.disabled = false;
+        btnDetener.disabled = false;
 
     })
 
